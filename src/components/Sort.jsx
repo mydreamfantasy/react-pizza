@@ -2,15 +2,15 @@ import React from 'react';
 
 function Sort() {
   const [open, setOpen] = React.useState(false);
-  const [selected, setSelected] = React.useState(false);
+  const [selected, setSelected] = React.useState(0);
 
   const listSort = ['популярности', 'цене', 'алфавиту'];
-  const sortName = listSort[selected]
+  const sortName = listSort[selected];
 
   const onCLickListItem = (index) => {
     setSelected(index);
-    setOpen(false)
-  }
+    setOpen(false);
+  };
 
   return (
     <div className="sort">
