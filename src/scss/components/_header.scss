@@ -1,13 +1,41 @@
-@import "../variables";
+@import '../variables';
 
 .header {
   border-bottom: 1px solid $gray-line;
   padding: 40px 0;
 
+  @media (max-width: 645px) {
+    padding-bottom: 20px;
+  }
+
   .container {
     display: flex;
     align-items: center;
     justify-content: space-between;
+
+    @media (max-width: 645px) {
+      flex-direction: column;
+
+      .header__logo {
+        margin-bottom: 30px;
+
+        div {
+          h1 {
+            padding-left: 30px;
+          }
+        }
+      }
+    }
+
+    @media (max-width: 375px) {
+      .header__logo {
+        div {
+          h1 {
+            padding-left: 10px;
+          }
+        }
+      }
+    }
   }
 
   &__logo {
