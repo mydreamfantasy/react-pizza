@@ -17,13 +17,27 @@ function Sort() {
 
   const [open, setOpen] = React.useState(false);
 
+  const sortRef = React.useRef();
+
   const onCLickListItem = (obj) => {
     dispatch(setSort(obj));
     setOpen(false);
   };
 
+  React.useEffect(() => {
+    const handleClickOutside = (evt) => {
+      console.log(evt);
+      let path = evt.composedPath().includes(sortRef.current);
+      if (!path) setOpen(false);
+    };
+
+    document.body.addEventListener('click', handleClickOutside);
+
+    return () => document.body.removeEventListener('click', handleClickOutside);
+  }, []);
+
   return (
-    <div className="sort">
+    <div ref={sortRef} className="sort">
       <div className="sort__label">
         <svg
           width="10"
