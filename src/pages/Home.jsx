@@ -1,6 +1,6 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import qs from 'qs';
 
 import Categories from '../components/Categories';
@@ -8,21 +8,22 @@ import Sort, { listSort } from '../components/Sort';
 import PizzaBlock from '../components/PizzaBlock';
 import Skeleton from '../components/PizzaBlock/Skeleton';
 import Pagination from '../components/Pagination';
-import { SearchContext } from '../App';
-import { setCategoryId, setCurrentPage, setFilters } from '../redux/slices/filterSlice';
-import { fetchPizza } from '../redux/slices/pizzaSlice';
+import {
+  selectFilter,
+  setCategoryId,
+  setCurrentPage,
+  setFilters,
+} from '../redux/slices/filterSlice';
+import { fetchPizza, selectPizzaData } from '../redux/slices/pizzaSlice';
 
 const Home = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { categoryId, sort, currentPage } = useSelector((state) => state.filter);
-  const { items, status } = useSelector((state) => state.pizza);
+  const { categoryId, sort, currentPage, searchValue } = useSelector(selectFilter);
+  const { items, status } = useSelector(selectPizzaData);
   const sortType = sort.sortProperty;
   const isSearch = React.useRef(false);
   const isMounted = React.useRef(false);
-
-  const { searchValue } = React.useContext(SearchContext);
-  // const [isLoading, setIsLoading] = React.useState(true);
 
   const onChangeCategory = (id) => {
     dispatch(setCategoryId(id));
@@ -33,8 +34,6 @@ const Home = () => {
   };
 
   const fetchPizzas = async () => {
-    // setIsLoading(true);
-
     const order = sortType.includes('-') ? 'asc' : 'desc';
     const sortBy = sortType.replace('-', '');
     const category = categoryId > 0 ? `category=${categoryId}` : '';
@@ -94,7 +93,11 @@ const Home = () => {
   }, [categoryId, sortType, searchValue, currentPage]);
 
   const skeletons = [...new Array(6)].map((_, index) => <Skeleton key={index} />);
-  const pizzas = items.map((obj) => <PizzaBlock key={obj.id} {...obj} />);
+  const pizzas = items.map((obj) => (
+    <Link key={obj.id} to={`/pizza/${obj.id}`}>
+      <PizzaBlock {...obj} />
+    </Link>
+  ));
 
   return (
     <div className="container">
@@ -105,9 +108,7 @@ const Home = () => {
       <h2 className="content__title">Все пиццы</h2>
       {status === 'error' ? (
         <div className="content__error-info">
-          <h2>
-            Произошла ошибка <icon>😕</icon>
-          </h2>
+          <h2>Произошла ошибка 😕</h2>
           <p>Не удалось загрузить самые вкусные питсы. Попробуйте повторить попытку позже. </p>
         </div>
       ) : (
