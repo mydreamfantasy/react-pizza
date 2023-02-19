@@ -2,7 +2,7 @@ import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { setSort } from '../redux/slices/filterSlice';
 
-const listSort = [
+export const listSort = [
   { name: 'популярности UP', sortProperty: 'rating' },
   { name: 'популярности DOWN', sortProperty: '-rating' },
   { name: 'цене UP', sortProperty: 'price' },
@@ -26,7 +26,6 @@ function Sort() {
 
   React.useEffect(() => {
     const handleClickOutside = (evt) => {
-      console.log(evt);
       let path = evt.composedPath().includes(sortRef.current);
       if (!path) setOpen(false);
     };
