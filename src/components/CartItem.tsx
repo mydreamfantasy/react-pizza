@@ -1,6 +1,6 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import { addItem, minusItem, removeItem } from '../redux/slices/cartSlice';
+import { addItem, CartItem, minusItem, removeItem } from '../redux/slices/cartSlice';
 
 type CartItemProps = {
   id: string;
@@ -12,20 +12,28 @@ type CartItemProps = {
   size: string;
 };
 
-const CartItem: React.FC<CartItemProps> = ({ id, title, imageUrl, price, count, type, size }) => {
+const CartItemBlock: React.FC<CartItemProps> = ({
+  id,
+  title,
+  imageUrl,
+  price,
+  count,
+  type,
+  size,
+}) => {
   const dispatch = useDispatch();
 
   const onClickPlus = () => {
-    dispatch(addItem({ id, type, size }));
+    dispatch(addItem({ id, type } as CartItem));
   };
 
   const onClickMinus = () => {
-    dispatch(minusItem({ id, type, size }));
+    dispatch(minusItem({ id, type } as CartItem));
   };
 
   const onClickRemove = () => {
     if (window.confirm('Ты действительно хочешь удалить все пиццки? :(')) {
-      dispatch(removeItem(id));
+      dispatch(removeItem({ id } as CartItem));
     }
   };
 
@@ -112,4 +120,4 @@ const CartItem: React.FC<CartItemProps> = ({ id, title, imageUrl, price, count, 
   );
 };
 
-export default CartItem;
+export default CartItemBlock;
